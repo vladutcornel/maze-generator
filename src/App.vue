@@ -1,22 +1,65 @@
 <template>
     <div id="app">
         <div class="G">
-            <table>
-                <tbody @touchstart="onTouchStart"
-                       @touchmove="$event.preventDefault()"
-                       @touchend="onTouchEnd"
-                       @keyup="onKeyPress"
-                >
-                <tr v-for="(columns, row) in maze.cellMatrix" :key="'row' + row">
-                    <td v-for="(cell, column) in columns" :key="'cell' + row + '/' + column" :class="cellClass(cell)">
-                        <img v-if="isCurrent(cell)" src="@/assets/sheep.svg" />
-                        <button v-else-if="isNeighbour(cell)" @click="moveTo(cell)">
+            <div class="table"
+                 @touchstart="onTouchStart"
+                 @touchmove="$event.preventDefault()"
+                 @touchend="onTouchEnd"
+                 @keyup="onKeyPress"
+            >
+                    <!-- North West -->
+                    <div v-if="hasNorthWest" :class="cellClassNorthWest"></div>
+                    <div v-else class="C out"></div>
+
+                    <!-- North -->
+                    <div v-if="hasNorth" :class="cellClassNorth">
+                        <button v-if="canMoveNorth" @click="moveToNorth">
                             Move here
                         </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                    </div>
+                    <div v-else class="C out"></div>
+
+                    <!-- North East -->
+                    <div v-if="hasNorthEast" :class="cellClassNorthEast"></div>
+                    <div v-else class="C out"></div>
+
+                    <!-- West -->
+                    <div v-if="hasWest" :class="cellClassWest">
+                        <button v-if="canMoveWest" @click="moveToWest">
+                            Move here
+                        </button>
+                    </div>
+                    <div v-else class="C out"></div>
+
+                    <div :class="currentCellClass">
+                        <img src="@/assets/sheep.svg" />
+                    </div>
+
+                    <!-- East -->
+                    <div v-if="hasEast" :class="cellClassEast">
+                        <button v-if="canMoveEast" @click="moveToEast">
+                            Move here
+                        </button>
+                    </div>
+                    <div v-else class="C out"></div>
+
+                    <!-- South West -->
+                    <div v-if="hasSouthWest" :class="cellClassSouthWest"></div>
+                    <div v-else class="C out"></div>
+
+                    <!-- South -->
+                    <div v-if="hasSouth" :class="cellClassSouth">
+                        <button v-if="canMoveSouth" @click="moveToSouth">
+                            Move here
+                        </button>
+                    </div>
+                    <div v-else class="C out"></div>
+
+                    <!-- South East -->
+                    <div v-if="hasSouthEast" class="C" :class="cellClassSouthEast"></div>
+                    <div v-else class="C out"></div>
+
+            </div>
         </div>
         <label>
             <div>Rows:</div>
@@ -44,6 +87,122 @@ export default {
             maze: new Maze({rows: 10, cols: 10}),
             currentCell: null,
         }
+    },
+
+    computed: {
+        // region direction flags
+        hasNorth() {
+            if (! this.currentCell) return false;
+
+            return this.currentCell.row > 0;
+        },
+        hasSouth() {
+            if (! this.currentCell) return false;
+
+            return this.currentCell.row < (this.maze.rows - 1);
+        },
+        hasWest() {
+            if (! this.currentCell) return false;
+
+            return this.currentCell.column > 0;
+        },
+        hasEast() {
+            if (! this.currentCell) return false;
+
+            return this.currentCell.column < (this.maze.columns - 1);
+        },
+
+        hasNorthWest() {
+            return this.hasNorth && this.hasWest;
+        },
+        hasNorthEast() {
+            return this.hasNorth && this.hasEast;
+        },
+
+        hasSouthWest() {
+            return this.hasSouth && this.hasWest;
+        },
+        hasSouthEast() {
+            return this.hasSouth && this.hasEast;
+        },
+
+        // endregion
+
+        // region Cell classes
+        currentCellClass() {
+            if (! this.currentCell) return false;
+
+            return this.cellClass(this.currentCell);
+        },
+
+        cellClassNorth() {
+            if (! this.hasNorth) return false;
+
+            return this.cellClass(this.currentCell.neighbours.north);
+        },
+
+        cellClassSouth() {
+            if (! this.hasSouth) return false;
+
+            return this.cellClass(this.currentCell.neighbours.south);
+        },
+
+        cellClassWest() {
+            if (! this.hasWest) return false;
+
+            return this.cellClass(this.currentCell.neighbours.west);
+        },
+
+        cellClassEast() {
+            if (! this.hasEast) return false;
+
+            return this.cellClass(this.currentCell.neighbours.east);
+        },
+
+        cellClassNorthWest() {
+            if (! this.hasNorthWest) return false;
+
+            return this.cellClass(this.currentCell.neighbours.north.neighbours.west);
+        },
+
+        cellClassNorthEast() {
+            if (! this.hasNorthEast) return false;
+
+            return this.cellClass(this.currentCell.neighbours.north.neighbours.east);
+        },
+
+        cellClassSouthWest() {
+            if (! this.hasSouthWest) return false;
+
+            return this.cellClass(this.currentCell.neighbours.south.neighbours.west);
+        },
+
+        cellClassSouthEast() {
+            if (! this.hasSouthEast) return false;
+
+            return this.cellClass(this.currentCell.neighbours.south.neighbours.east);
+        },
+
+        // endregion
+
+        // Region Can move
+        canMoveNorth() {
+            if (! this.hasNorth ) return false;
+            return this.isNeighbour(this.currentCell.neighbours.north);
+        },
+        canMoveSouth() {
+            if (! this.hasSouth ) return false;
+            return this.isNeighbour(this.currentCell.neighbours.south);
+        },
+        canMoveWest() {
+            if (! this.hasWest ) return false;
+            return this.isNeighbour(this.currentCell.neighbours.west);
+        },
+        canMoveEast() {
+            if (! this.hasEast ) return false;
+            return this.isNeighbour(this.currentCell.neighbours.east);
+        },
+        // endregion
     },
 
     mounted() {
@@ -172,6 +331,22 @@ export default {
             this.scrollIntoView();
         },
 
+        moveToNorth() {
+            this.swipe("north")
+        },
+
+        moveToSouth() {
+            this.swipe("south")
+        },
+
+        moveToWest() {
+            this.swipe("west")
+        },
+
+        moveToEast() {
+            this.swipe("east")
+        },
+
         moveTo(neighbour) {
             let current = this.currentCell;
 
@@ -197,33 +372,29 @@ export default {
                 return;
             }
 
-            let {rows, columns} = this.maze;
+            // let game = this.$el.querySelector(".G");
+            // let table = game.querySelector(".table");
+            // let cells = table.querySelector(".C");
+            // // let img = table.querySelector("img");
+            //
+            // [].forEach.call(cells, cell => {
+            //     cell.style.width = '1px';
+            //     cell.style.height = '1px';
+            // })
 
-            let game = this.$el.querySelector(".G");
-            // let table = game.querySelector("table");
-            // let img = table.querySelector("img");
+            // let {
+            //     offsetWidth,
+            //     offsetHeight
+            // } = game;
 
-            let {
-                scrollTop,
-                scrollLeft,
-                offsetWidth,
-                offsetHeight,
-                scrollWidth,
-                scrollHeight
-            } = game;
-
-            let cellWidth = scrollWidth / columns;
-
-            scrollLeft = (current.column * cellWidth) - offsetWidth/2 + cellWidth/2;
-
-            let cellHeight = scrollHeight / rows;
-
-            scrollTop = (current.row * cellHeight) - offsetHeight/2 + cellHeight/2;
-
-            console.log(scrollLeft);
-
-            game.scrollLeft = scrollLeft;
-            game.scrollTop = scrollTop;
+            // let cellWidth = offsetWidth / 3;
+            //
+            // let cellHeight = offsetHeight / 3;
+            //
+            // [].forEach.call(cells, cell => {
+            //     cell.style.width = cellWidth + 'px';
+            //     cell.style.height = cellHeight + 'px';
+            // })
 
             // img.scrollIntoView();
 
@@ -288,31 +459,30 @@ body {
 
         justify-self: center;
 
-        table {
+        .table {
+            flex-direction: column;
             border-spacing: unset;
+            width: 100%;
+            height: 100%;
 
-            tr:first-child {
-                .N {
-                    border-top-width: $borderWidth;
-                }
-            }
-
-            tr:last-child {
-                .S {
-                    border-bottom-width: $borderWidth;
-                }
-            }
-
-            td.W:first-child {
-                border-left-width: $borderWidth;
-            }
-
-            td.E:last-child {
-                border-right-width: $borderWidth;
-            }
+            table-layout: fixed;
+            display: grid;
+            grid-template-rows: 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
+            align-content: stretch;
 
             img {
-                width: $cellSize*0.8;
+                width: 100%;
+            }
+
+            .C {
+                display: grid;
+                align-content: center;
+                justify-content: center;
+            }
+
+            .out {
+                background-color: #000000;
             }
         }
 
@@ -331,13 +501,6 @@ body {
                 style: dashed;
                 color: transparent;
             }
-
-            width: $cellSize;
-            height: $cellSize;
-
-            min-width: $cellSize;
-            min-height: $cellSize;
-
             background-clip: content-box;
         }
 
