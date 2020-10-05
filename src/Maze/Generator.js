@@ -6,7 +6,7 @@ import Cell from "@/Maze/Cell";
  * @property {Number} columns   Number of columns in the maze (width)
  */
 export default class Maze {
-    constructor({rows = Maze.MIN_ROWS, cols: columns = Maze.MIN_COLUMNS}) {
+    constructor({rows = Maze.MIN_ROWS, columns = Maze.MIN_COLUMNS}) {
         let proxy = new Proxy(this, {
             get(target, prop) {
                 return target[prop];
@@ -147,7 +147,7 @@ export default class Maze {
     }
 
     static get MAX_ROWS() {
-        return 100;
+        return 40;
     }
 
     static get MIN_ROWS() {
@@ -155,7 +155,7 @@ export default class Maze {
     }
 
     static get MAX_COLUMNS() {
-        return 100;
+        return 40;
     }
 
     static get MIN_COLUMNS() {
