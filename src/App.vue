@@ -415,7 +415,8 @@ body {
 
     display: grid;
     justify-content: center;
-    grid-template-columns: 2fr 2fr 1fr;
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: auto 1fr auto;
     grid-gap: $borderWidth;
 
     padding: $borderWidth;
