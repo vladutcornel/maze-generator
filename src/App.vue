@@ -63,12 +63,12 @@
         </div>
         <label>
             <div>Rows:</div>
-            <input type="number" v-model="maze.rows" :min="Maze.MIN_ROWS" :max="Maze.MAX_ROWS" />
+            <input type="number" v-model="settings.rows" :min="Generator.MIN_ROWS" :max="Generator.MAX_ROWS" />
         </label>
 
         <label>
             <div>Columns:</div>
-            <input type="number" v-model="maze.columns" :min="Maze.MIN_COLUMNS" :max="Maze.MAX_COLUMNS" />
+            <input type="number" v-model="settings.columns" :min="Generator.MIN_COLUMNS" :max="Generator.MAX_COLUMNS" />
         </label>
 
         <button @click="startGame">Start</button>
@@ -77,19 +77,27 @@
 
 <script>
 
-import Maze from "@/Maze/Generator";
-
+import Generator from "@/Maze/Generator";
+let maze = new Generator({rows: 10, cols: 10});
+global.maze = maze;
 export default {
     name: 'App',
     data() {
         return {
-            Maze,
-            maze: new Maze({rows: 10, cols: 10}),
+            Generator,
             currentCell: null,
+            settings: {
+                rows: Generator.MIN_ROWS,
+                columns: Generator.MIN_COLUMNS,
+            }
         }
     },
 
     computed: {
+        maze() {
+            return maze;
+        },
+
         // region direction flags
         hasNorth() {
             if (! this.currentCell) return false;
@@ -203,6 +211,16 @@ export default {
             return this.isNeighbour(this.currentCell.neighbours.east);
         },
         // endregion
+    },
+
+    watch: {
+        settings: {
+            deep: true,
+            handler(settings) {
+                maze.columns = settings.columns;
+                maze.rows = settings.rows;
+            }
+        },
     },
 
     mounted() {
