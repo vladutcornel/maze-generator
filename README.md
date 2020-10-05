@@ -13,8 +13,8 @@ You can also click one of the `Move here` buttons.
 Even though I have a lot of experience in JavaScript and Vue, there's no other good way to prove it.
 I learned about this company that tests their candidates with a maze problem, so I started by creating a maze generator.
 
-The algorithm for maze generation is on [Wikipedia](https://en.wikipedia.org/wiki/Maze_generation_algorithm#Iterative_implementation), so just that wasn't be enough for me. That's why I turned it into a game.
-To make it a little more challenging, you won't see the entire maze (though with basic CSS magic, you can change that).
+The algorithm for maze generation is on [Wikipedia](https://en.wikipedia.org/wiki/Maze_generation_algorithm#Iterative_implementation), but just translating it in JS wasn't be enough for me. That's why I turned it into a game.
+To make it a little more challenging, you won't see the entire maze (It's a cute little sheep, she can't see far).
 
 ## Legal mambo-jumbo
 
