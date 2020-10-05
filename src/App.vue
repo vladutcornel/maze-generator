@@ -345,8 +345,6 @@ export default {
             }
 
             this.currentCell = next;
-
-            this.scrollIntoView();
         },
 
         moveToNorth() {
@@ -382,42 +380,6 @@ export default {
             }
         },
 
-        scrollIntoView() {
-
-            let current = this.currentCell;
-
-            if(! current ) {
-                return;
-            }
-
-            // let game = this.$el.querySelector(".G");
-            // let table = game.querySelector(".table");
-            // let cells = table.querySelector(".C");
-            // // let img = table.querySelector("img");
-            //
-            // [].forEach.call(cells, cell => {
-            //     cell.style.width = '1px';
-            //     cell.style.height = '1px';
-            // })
-
-            // let {
-            //     offsetWidth,
-            //     offsetHeight
-            // } = game;
-
-            // let cellWidth = offsetWidth / 3;
-            //
-            // let cellHeight = offsetHeight / 3;
-            //
-            // [].forEach.call(cells, cell => {
-            //     cell.style.width = cellWidth + 'px';
-            //     cell.style.height = cellHeight + 'px';
-            // })
-
-            // img.scrollIntoView();
-
-        },
-
         startGame () {
             this.maze.build();
 
@@ -425,7 +387,6 @@ export default {
 
             this.$nextTick(() => {
                 this.currentCell = this.maze.cellList[0];
-                this.scrollIntoView();
             })
         }
 
