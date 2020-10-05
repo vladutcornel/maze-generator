@@ -423,7 +423,8 @@ body {
     .G {
         // Game
         overflow: hidden;
-        outline: 1px solid;
+        box-shadow: 0 0 1rem $gray-700 inset, 0 0 1rem $gray-600 ;
+        border-radius: 50%;
 
         position: relative;
         scroll-behavior: smooth;
@@ -443,6 +444,7 @@ body {
             border-spacing: unset;
             width: 100%;
             height: 100%;
+            background-color: $white;
 
             table-layout: fixed;
             display: grid;
